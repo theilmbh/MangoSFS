@@ -2,7 +2,7 @@
 
 Vessel::Vessel()
 {
-  ref = NULL;
+  ref = 0;
 }
 
 Vessel::~Vessel()

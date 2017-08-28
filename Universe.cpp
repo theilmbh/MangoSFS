@@ -84,7 +84,7 @@ ObjHandle Universe::compute_gravity(double mjd, Vessel *ves, Vector3& G)
   double r_mag = 0;
   double g_mag = 0;
   double g_max = 0;
-  CelestialBody *g_max_body = NULL;
+  CelestialBody *g_max_body = 0;
 
   r = ves->lin_state.r;
 
