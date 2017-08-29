@@ -2,6 +2,18 @@
 #define THRUSTER_H
 
 #include "orb.hpp"
+#include <vector>
+
+enum ThrusterGroupType {
+  MAIN,
+  RETRO
+};
+
+struct ThrusterGroup {
+
+  ThrusterGroupType type;
+  std::vector<ThrusterHandle> thrusters;
+};
 
 class Thruster {
 
@@ -23,7 +35,7 @@ public:
   void    setLevel(double lvl);
   double  getIsp();
 
-// Force Vectors 
+// Force Vectors
   Vector3 getPosition();
   Vector3 getDirection();
 

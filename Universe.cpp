@@ -80,6 +80,11 @@ LinearStateVector Universe::eom_linear(double mjd, LinearStateVector state, Vect
 
 ObjHandle Universe::compute_gravity(double mjd, Vessel *ves, Vector3& G)
 {
+  /*
+   * Computes gravitational acceleration vector for Vessel ves 
+   * and places it in Vector3 G.  Returns handle to celestialBody
+   * providing greatest contribution to gravity vector
+   */
   Vector3 r, r_hat, delta_r, accel = {0.0, 0.0, 0.0}; /* object position */
   double r_mag = 0;
   double g_mag = 0;
