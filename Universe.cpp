@@ -20,7 +20,7 @@ void Universe::propagate(double step)
 {
   for(Vessel *v : vessel_list)
   {
-    v->preStep(mjd, simt, step);
+    v->update(mjd, simt, step);
     propagate_linear(v, step);
     integrate_rk4_angular(v, step);
   }

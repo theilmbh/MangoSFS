@@ -54,6 +54,7 @@ public:
   ThrusterHandle addThruster(Vector3& pos, Vector3& dir,
                              double max_thrust, double Isp);
   bool delThruster(ThrusterHandle th);
+  void killThrust(); /* Kills all currently active thrusters */
 };
 
 #endif

@@ -19,6 +19,7 @@ int main()
   Vessel *Probe = new Vessel();
 
   Probe->mass = 1000.0;
+  Probe->empty_mass = 10.0;
   LinearStateVector ProbeInitState;
   ProbeInitState.r.x = 6871.0e3 + 400e3;
   ProbeInitState.r.y = 0.0;

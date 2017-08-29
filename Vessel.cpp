@@ -1,5 +1,6 @@
 #include "Vessel.hpp"
 #include "Thruster.hpp"
+#include <cmath>
 
 Vessel::Vessel()
 {
@@ -22,9 +23,12 @@ void Vessel::update(double mjd, double simt, double dt)
   double deltaM = 0;
   for(Thruster *th : thrusters)
   {
-    deltaM += th->getCurrentThrustMag()/(g0*th->getIsp());
+    deltaM += dt*(th->getCurrentThrustMag()/(g0*th->getIsp()));
   }
-  mass -= deltaM;
+  if(mass-empty_mass < deltaM) {
+    killThrust();
+  }
+  mass = fmax(mass-(empty_mass+deltaM), empty_mass);
 }
 
 void Vessel::addForce(const Vector3& F, const Vector3& pos)
@@ -96,4 +100,12 @@ bool Vessel::delThruster(ThrusterHandle th)
 {
   delete (Thruster *)th;
   return 1;
+}
+
+void Vessel::killThrust()
+{
+  for(Thruster *th : thrusters)
+  {
+    th->setLevel(0.0);
+  }
 }
