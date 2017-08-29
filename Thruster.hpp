@@ -16,12 +16,14 @@ public:
   Thruster(Vector3& pos, Vector3& dir, double max_thrust, double isp);
   ~Thruster();
 
+// Thrust Handling
   Vector3 getCurrentThrust();
-  double getCurrentThrustMag();
-  double getLevel();
-  void setLevel(double lvl);
-  double getIsp();
+  double  getCurrentThrustMag();
+  double  getLevel();
+  void    setLevel(double lvl);
+  double  getIsp();
 
+// Force Vectors 
   Vector3 getPosition();
   Vector3 getDirection();
 

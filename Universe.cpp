@@ -7,7 +7,7 @@
 
 Universe::Universe(double init_mjd)
 {
-  this->mjd = init_mjd;
+  this->mjd  = init_mjd;
   this->simt = 0.0;
 }
 
@@ -91,9 +91,10 @@ ObjHandle Universe::compute_gravity(double mjd, Vessel *ves, Vector3& G)
   for(CelestialBody *cb : celbody_list)
   {
     delta_r = r + (-1.0)*cb->get_ephemeris(mjd);
-    r_mag = norm3(delta_r);
-    r_hat = (1.0/r_mag)*delta_r;
-    g_mag = ((cb->mu) / (r_mag*r_mag));
+    r_mag   = norm3(delta_r);
+    r_hat   = (1.0/r_mag)*delta_r;
+    g_mag   = ((cb->mu) / (r_mag*r_mag));
+
     if(g_mag > g_max)
     {
       g_max_body = cb;
