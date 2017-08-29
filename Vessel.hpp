@@ -5,6 +5,7 @@
 #include <vector>
 
 class CelestialBody;
+class Thruster;
 
 class Vessel {
 
@@ -13,8 +14,9 @@ public:
   LinearStateVector lin_state;
   AngularStateVector rot_state;
 
-// Forces
+// Forces + Thrusters
   std::vector<ForceData*> force_stack;
+  std::vector<Thruster*> thrusters;
 
 // Internal handle and current reference body
   ObjHandle h;
@@ -45,6 +47,11 @@ public:
 
 // Coordinate Transforms
   void Local2Global(const Vector3& loc, Vector3& glob);
+
+// Thruster Management
+  ThrusterHandle addThruster(Vector3& pos, Vector3& dir,
+                             double max_thrust, double Isp);
+  bool delThruster(ThrusterHandle th);
 };
 
 #endif

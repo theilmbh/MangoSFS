@@ -1,4 +1,5 @@
 #include "Vessel.hpp"
+#include "Thruster.hpp"
 
 Vessel::Vessel()
 {
@@ -36,6 +37,11 @@ void Vessel::getTotalForce(Vector3& F)
   {
     F = F + fd->F;
   }
+
+  for(Thruster *th : thrusters)
+  {
+    F = F + th->getCurrentThrust();
+  }
 }
 
 void Vessel::getTotalTorque(Vector3& T)
@@ -44,6 +50,11 @@ void Vessel::getTotalTorque(Vector3& T)
   for(ForceData *fd : force_stack)
   {
     T = T + cross(fd->pos, fd->F);
+  }
+  
+  for(Thruster *th : thrusters)
+  {
+    T = T + cross(th->getPosition(), th->getCurrentThrust());
   }
 }
 
@@ -64,4 +75,19 @@ double Vessel::interpTotalMass(double step)
 void Vessel::setReference(ObjHandle hRef)
 {
   ref = (CelestialBody *)hRef;
+}
+
+/* Thruster Management */
+ThrusterHandle Vessel::addThruster(Vector3& pos, Vector3& dir,
+                                   double max_thrust, double Isp)
+{
+  Thruster *th = new Thruster(pos, dir, max_thrust, Isp);
+  thrusters.push_back(th);
+  return (ThrusterHandle)th;
+}
+
+bool Vessel::delThruster(ThrusterHandle th)
+{
+  delete (Thruster *)th;
+  return 1;
 }

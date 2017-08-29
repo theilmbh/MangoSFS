@@ -2,7 +2,8 @@
 #define ORB_H
 
 #include <cmath>
-typedef void *ObjHandle;
+typedef void * ObjHandle;
+typedef void * ThrusterHandle;
 
 const double pi = 3.14159;
 typedef struct Vector3 {
