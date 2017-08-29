@@ -17,8 +17,10 @@ public:
   ~Thruster();
 
   Vector3 getCurrentThrust();
+  double getCurrentThrustMag();
   double getLevel();
   void setLevel(double lvl);
+  double getIsp();
 
   Vector3 getPosition();
   Vector3 getDirection();

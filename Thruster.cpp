@@ -18,6 +18,11 @@ Vector3 Thruster::getCurrentThrust()
   return (level*max_thrust/norm3(dir))*dir;
 }
 
+double Thruster::getCurrentThrustMag()
+{
+  return (level*max_thrust);
+}
+
 void Thruster::setLevel(double lvl)
 {
   level = lvl;
@@ -26,6 +31,11 @@ void Thruster::setLevel(double lvl)
 double Thruster::getLevel()
 {
   return level;
+}
+
+double Thruster::getIsp()
+{
+  return Isp;
 }
 
 Vector3 Thruster::getPosition()

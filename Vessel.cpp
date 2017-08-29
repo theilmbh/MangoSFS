@@ -16,9 +16,15 @@ int Vessel::preStep(double mjd, double simt, double dt)
   return 0;
 }
 
-void update(double mjd, double simt, double dt)
+void Vessel::update(double mjd, double simt, double dt)
 {
-
+  // Decrease mass according to current thruster usage
+  double deltaM = 0;
+  for(Thruster *th : thrusters)
+  {
+    deltaM += th->getCurrentThrustMag()/(g0*th->getIsp());
+  }
+  mass -= deltaM;
 }
 
 void Vessel::addForce(const Vector3& F, const Vector3& pos)
@@ -51,7 +57,7 @@ void Vessel::getTotalTorque(Vector3& T)
   {
     T = T + cross(fd->pos, fd->F);
   }
-  
+
   for(Thruster *th : thrusters)
   {
     T = T + cross(th->getPosition(), th->getCurrentThrust());

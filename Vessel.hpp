@@ -4,6 +4,8 @@
 #include "orb.hpp"
 #include <vector>
 
+#define g0 9.81
+
 class CelestialBody;
 class Thruster;
 
