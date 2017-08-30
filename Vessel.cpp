@@ -109,3 +109,21 @@ void Vessel::killThrust()
     th->setLevel(0.0);
   }
 }
+
+// Thruster Group Management
+ThrusterGroup * Vessel::createThrusterGroup(ThrusterGroupType type)
+{
+  ThrusterGroup *th_grp = new ThrusterGroup;
+  th_grp->type = type;
+  return th_grp;
+}
+
+void Vessel::destroyThrusterGroup(ThrusterGroup *th_grp)
+{
+  delete th_grp;
+}
+
+void Vessel::addThrusterToGroup(ThrusterGroup *th_grp, ThrusterHandle th)
+{
+  th_grp->thrusters.push_back(th);
+}

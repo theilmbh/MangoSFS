@@ -2,12 +2,13 @@
 #define VESSEL_H
 
 #include "orb.hpp"
+#include "Thruster.hpp"
 #include <vector>
 
 #define g0 9.81
 
 class CelestialBody;
-class Thruster;
+
 
 class Vessel {
 
@@ -19,6 +20,7 @@ public:
 // Forces + Thrusters
   std::vector<ForceData*> force_stack;
   std::vector<Thruster*> thrusters;
+  std::vector<ThrusterGroup*> thruster_groups;
 
 // Internal handle and current reference body
   ObjHandle h;
@@ -55,6 +57,11 @@ public:
                              double max_thrust, double Isp);
   bool delThruster(ThrusterHandle th);
   void killThrust(); /* Kills all currently active thrusters */
+
+// Thruster Groups
+  ThrusterGroup* createThrusterGroup(ThrusterGroupType type);
+  void destroyThrusterGroup(ThrusterGroup *th_grp);
+  void addThrusterToGroup(ThrusterGroup *th_grp, ThrusterHandle th);
 };
 
 #endif
