@@ -50,7 +50,12 @@ public:
   void getTotalTorque(Vector3& T);
 
 // Coordinate Transforms
+
+  /* Body Coordinates to Global Frame */
   void Local2Global(const Vector3& loc, Vector3& glob);
+
+  /* Get LVLH Frame */
+  void getLVLH(Vector3& X, Vector3& Y, Vector3& Z);
 
 // Thruster Management
   ThrusterHandle addThruster(Vector3& pos, Vector3& dir,
