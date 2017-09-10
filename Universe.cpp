@@ -7,7 +7,7 @@
 
 Universe::Universe(double init_mjd)
 {
-  this->mjd = init_mjd;
+  this->mjd  = init_mjd;
   this->simt = 0.0;
 }
 
@@ -20,7 +20,7 @@ void Universe::propagate(double step)
 {
   for(Vessel *v : vessel_list)
   {
-    v->preStep(mjd, simt, step);
+    v->update(mjd, simt, step);
     propagate_linear(v, step);
     integrate_rk4_angular(v, step);
   }
@@ -80,6 +80,11 @@ LinearStateVector Universe::eom_linear(double mjd, LinearStateVector state, Vect
 
 ObjHandle Universe::compute_gravity(double mjd, Vessel *ves, Vector3& G)
 {
+  /*
+   * Computes gravitational acceleration vector for Vessel ves 
+   * and places it in Vector3 G.  Returns handle to celestialBody
+   * providing greatest contribution to gravity vector
+   */
   Vector3 r, r_hat, delta_r, accel = {0.0, 0.0, 0.0}; /* object position */
   double r_mag = 0;
   double g_mag = 0;
@@ -91,9 +96,10 @@ ObjHandle Universe::compute_gravity(double mjd, Vessel *ves, Vector3& G)
   for(CelestialBody *cb : celbody_list)
   {
     delta_r = r + (-1.0)*cb->get_ephemeris(mjd);
-    r_mag = norm3(delta_r);
-    r_hat = (1.0/r_mag)*delta_r;
-    g_mag = ((cb->mu) / (r_mag*r_mag));
+    r_mag   = norm3(delta_r);
+    r_hat   = (1.0/r_mag)*delta_r;
+    g_mag   = ((cb->mu) / (r_mag*r_mag));
+
     if(g_mag > g_max)
     {
       g_max_body = cb;

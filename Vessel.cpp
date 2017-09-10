@@ -1,4 +1,6 @@
 #include "Vessel.hpp"
+#include "Thruster.hpp"
+#include <cmath>
 
 Vessel::Vessel()
 {
@@ -15,9 +17,18 @@ int Vessel::preStep(double mjd, double simt, double dt)
   return 0;
 }
 
-void update(double mjd, double simt, double dt)
+void Vessel::update(double mjd, double simt, double dt)
 {
-
+  // Decrease mass according to current thruster usage
+  double deltaM = 0;
+  for(Thruster *th : thrusters)
+  {
+    deltaM += dt*(th->getCurrentThrustMag()/(g0*th->getIsp()));
+  }
+  if(mass-empty_mass < deltaM) {
+    killThrust();
+  }
+  mass = fmax(mass-(empty_mass+deltaM), empty_mass);
 }
 
 void Vessel::addForce(const Vector3& F, const Vector3& pos)
@@ -36,6 +47,11 @@ void Vessel::getTotalForce(Vector3& F)
   {
     F = F + fd->F;
   }
+
+  for(Thruster *th : thrusters)
+  {
+    F = F + th->getCurrentThrust();
+  }
 }
 
 void Vessel::getTotalTorque(Vector3& T)
@@ -44,6 +60,11 @@ void Vessel::getTotalTorque(Vector3& T)
   for(ForceData *fd : force_stack)
   {
     T = T + cross(fd->pos, fd->F);
+  }
+
+  for(Thruster *th : thrusters)
+  {
+    T = T + cross(th->getPosition(), th->getCurrentThrust());
   }
 }
 
@@ -58,10 +79,61 @@ void Vessel::Local2Global(const Vector3& loc, Vector3& glob)
 
 double Vessel::interpTotalMass(double step)
 {
+  /* Interpolates the mass of the vehicle during timesteps
+  */
   return mass;
 }
 
 void Vessel::setReference(ObjHandle hRef)
 {
+  /* Sets the vessel reference body */
   ref = (CelestialBody *)hRef;
+}
+
+void Vessel::getLVLH(Vector3& X, Vector3& Y, Vector3& Z)
+{
+  /* Return East, North, Up unit vectors in (x, y, z)
+  representing the Local vertical local horizontal frame
+  Vectors written in global bases */
+}
+
+/* Thruster Management */
+ThrusterHandle Vessel::addThruster(Vector3& pos, Vector3& dir,
+                                   double max_thrust, double Isp)
+{
+  Thruster *th = new Thruster(pos, dir, max_thrust, Isp);
+  thrusters.push_back(th);
+  return (ThrusterHandle)th;
+}
+
+bool Vessel::delThruster(ThrusterHandle th)
+{
+  delete (Thruster *)th;
+  return 1;
+}
+
+void Vessel::killThrust()
+{
+  for(Thruster *th : thrusters)
+  {
+    th->setLevel(0.0);
+  }
+}
+
+// Thruster Group Management
+ThrusterGroup * Vessel::createThrusterGroup(ThrusterGroupType type)
+{
+  ThrusterGroup *th_grp = new ThrusterGroup;
+  th_grp->type = type;
+  return th_grp;
+}
+
+void Vessel::destroyThrusterGroup(ThrusterGroup *th_grp)
+{
+  delete th_grp;
+}
+
+void Vessel::addThrusterToGroup(ThrusterGroup *th_grp, ThrusterHandle th)
+{
+  th_grp->thrusters.push_back(th);
 }
