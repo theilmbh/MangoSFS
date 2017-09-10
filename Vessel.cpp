@@ -79,12 +79,22 @@ void Vessel::Local2Global(const Vector3& loc, Vector3& glob)
 
 double Vessel::interpTotalMass(double step)
 {
+  /* Interpolates the mass of the vehicle during timesteps
+  */
   return mass;
 }
 
 void Vessel::setReference(ObjHandle hRef)
 {
+  /* Sets the vessel reference body */
   ref = (CelestialBody *)hRef;
+}
+
+void Vessel::getLVLH(Vector3& X, Vector3& Y, Vector3& Z)
+{
+  /* Return East, North, Up unit vectors in (x, y, z)
+  representing the Local vertical local horizontal frame
+  Vectors written in global bases */
 }
 
 /* Thruster Management */
